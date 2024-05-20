@@ -13,6 +13,7 @@ urlpatterns = [
     path('planillas/revision',views.revision, name='revision'),
 
     path('profesores', views.profesores, name='profesores'),
+    path('profesores/crear', views.profesorCrear, name='profesor_crear'),
     
     path('materias', views.materias, name='materia'),
     path('materias/crear', views.materiaCrear, name='materia_crear'),

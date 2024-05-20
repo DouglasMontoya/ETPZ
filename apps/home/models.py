@@ -5,6 +5,24 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import *
 
+class Profesor(models.Model):
+    CI_OPT=(
+        ('V', 'V'),
+        ('E', 'E')
+    )
+
+    ci = models.CharField(max_length=10, validators=[MinLengthValidator(7), RegexValidator(r'^[0-9]{1,2}[.]?[0-9]{3}[.]?[0-9]{3}$')], unique=True, null=True)
+    ci_tipo = models.CharField(max_length=1, choices=CI_OPT, null=True)
+    nombre = models.CharField(max_length=30, null=True)
+    apellido = models.CharField(max_length=30, null=True)
+
+    class Meta:
+        verbose_name = ("Profesor")
+        verbose_name_plural = ("Profesores")
+
+    def __str__(self):
+        return f'{self.nombre} {self.apellido}'
+
 class Estudiante(models.Model):
     CI_OPT=(
         ('V', 'V'),

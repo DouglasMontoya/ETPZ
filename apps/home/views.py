@@ -14,7 +14,6 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 from .models import *
 from .forms import *
-
 @login_required(login_url="/login/")
 def index(request):
     context = {'segment': 'index'}
@@ -284,10 +283,33 @@ def profesores(request):
         'title': 'Profesores',
         'buscar': True,
         'table': table,
+        'url_crear':'/profesores/crear'
     }
 
     return render(request, 'home/table.html', context)
 
+@login_required
+@permission_required('home.add_profesor', raise_exception=True)#type:ignore
+def profesorCrear(request):
+    form = profesorForm(request.POST or None)
+    content = 'home/form-content/profesor_form.html'
+    context = {
+        'form':form,
+        'segment':'profesor',
+        'title':'Registrar Docente',
+        'content':content
+    }
+    if request.POST:
+        if form.is_valid():
+            e = form.save(commit=False)
+            #validación
+            #e.seccion = e.seccion.upper()
+            #e.save()
+            return redirect('profesor')
+        else:
+            print(form.errors)
+    
+    return render(request, 'layouts/form.html', context)
 
 @login_required(login_url="/login/")
 def estudiantes(request):

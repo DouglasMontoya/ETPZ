@@ -70,6 +70,21 @@ class estudianteForm(ModelForm):
             'periodo': Select(attrs={'class': 'form-control', 'id':'periodo'}),
             'seccion': TextInput(attrs={'class': 'form-control text-capitalize', 'id':'seccion'}),
         }
+class profesorForm(ModelForm):
+    class Meta:
+        model = Profesor
+        fields = (
+            'ci',
+            'ci_tipo',
+            'nombre',
+            'apellido',
+            )
+        widgets ={
+            'ci': TextInput(attrs={'class': 'form-control flex-grow-1 flat-left', 'id':'ci'}),
+            'ci_tipo': Select(attrs={'class': 'form-control flex-shrink-1 flat-right', 'id':'ci_tipo'}),
+            'nombre': TextInput(attrs={'class': 'form-control', 'id':'nombre'}),
+            'apellido': TextInput(attrs={'class': 'form-control', 'id':'apellido'}),
+        }        
 
 class NotaForm(ModelForm):
     class Meta:
