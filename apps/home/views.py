@@ -222,6 +222,29 @@ def cargaEliminar(request, pk):
     return redirect('carga')#Redireccionar normalmente
 
 @login_required(login_url="/login/")
+def datos_p(request):
+    form = estudianteForm(request.POST or None)
+    content = 'home/form-content/datos_form.html'
+    context = {
+        'form':form,
+        'segment':'estudiante',
+        'title':'Datos de la institución',
+        'content':content
+    }
+    if request.POST:
+        if form.is_valid():
+            e = form.save(commit=False)
+            #validación
+            e.seccion = e.seccion.upper()
+            e.save()
+            return redirect('dato_p')
+        else:
+            print(form.errors)
+    
+    return render(request, 'layouts/form.html', context)
+
+
+@login_required(login_url="/login/")
 def estudiantes(request):
     estudiantes = Estudiante.objects.all().order_by('ci')
 

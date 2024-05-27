@@ -28,6 +28,8 @@ urlpatterns = [
     path('notas/<str:pk>/editar', views.editarNotas, name='editar_notas'),
     path('notas/<str:pd>/carga', views.carga_notas, name='carga_notas'),
     path('notas/<str:pk>/<str:dir>/<str:periodo_sel>', views.estudianteVer, name='imprimir_notas'),
+    
+    path('datos_p', views.datos_p, name='dato_p'),
 
     path('periodos', views.periodos, name='periodo'),
     path('periodos/crear', views.periodoCrear, name='periodo_crear'),

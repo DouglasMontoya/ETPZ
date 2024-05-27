@@ -1,0 +1,86 @@
+<div class="d-flex flex-wrap gap-4 p-5">
+
+    <div class="flex-shrink-1 {% if form.seccion.errors %}form-error{% endif %}">
+        <label for="nombre">Nombre de la institución</label>
+        {{ form.nombre }}
+    </div>
+
+    <div class="flex-shrink-1 {% if form.seccion.errors %}form-error{% endif %}">
+        <label for="nombre">Dirección</label>
+        {{ form.nombre }}
+    </div>
+
+    <div class="flex-grow-1 {% if form.entidad_federal.errors %}form-error{% endif %}">
+        <label for="entidad_federal">Municipio</label>
+        {{ form.lugar_de_nacimiento }}
+    </div>
+
+    <div class="flex-grow-1 {% if form.entidad_federal.errors %}form-error{% endif %}">
+        <label for="entidad_federal">Entidad Federal</label>
+        {{ form.entidad_federal }}
+    </div>
+
+    <div class="flex-grow-1 {% if form.apellido.errors %}form-error{% endif %}">
+        <label for="apellido">Zona educativa</label>
+        {{ form.apellido }}
+    </div>
+
+    <div class="flex-shrink-1 {% if form.seccion.errors %}form-error{% endif %}">
+        <label for="periodo">Código de la institución</label>
+        {{ form.apellido }}
+    </div>
+
+    <div class="flex-shrink-1 {% if form.seccion.errors %}form-error{% endif %}">
+        <label for="periodo">Teléfono de la institución</label>
+        {{ form.apellido }}
+    </div>
+
+    <div class="flex-shrink-1 {% if form.seccion.errors %}form-error{% endif %}">
+        <label for="periodo">Período escolar</label>
+        {{ form.periodo }}
+    </div>
+
+    <div class="flex-grow-1 {% if form.nombre.errors %}form-error{% endif %}">
+        <label for="nombre">Director(a)</label>
+        {{ form.nombre }}
+    </div>
+
+    <div class="flex-grow-1"> 
+        <label for="ci">Cédula del Director(a)</label>
+        <div class="d-flex flex-row">
+            <div class="flex-shrink-1 {% if form.ci_tipo.errors %}form-error{% endif %}">
+                {{ form.ci_tipo }}
+            </div>
+            <div class="flex-grow-1 {% if form.ci.errors %}form-error{% endif %}">
+                {{ form.ci }}
+                {{ form.ci.errors }}
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center col-12 pt-2">
+        <button class="btn btn-primary btm-sm m-0 me-2" type="submit">Guardar</button>
+        <button class="btn btn-danger btm-sm m-0" onClick="window.history.back();return false;">Cancelar</button> 
+    </div>
+</div>
+{% block inner_javascripts %}
+<script>
+    $(document).ready(function(){
+        $('#ci_tipo').select2({
+            minimumResultsForSearch: Infinity,
+		    placeholder: '-',
+		    width: '100%',
+		    selectionCssClass: ':all:',
+		    dropdownCssClass: ':all:'
+        });
+        $('#periodo').select2({
+            minimumResultsForSearch: Infinity,
+		    placeholder: 'Seleccione...',
+		    allowClear: true,
+		    width: '100%',
+		    selectionCssClass: ':all:',
+		    dropdownCssClass: ':all:'
+        });
+    });
+</script>
+{% endblock inner_javascripts %}
