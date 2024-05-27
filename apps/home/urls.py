@@ -7,7 +7,13 @@ urlpatterns = [
     path('', views.index, name='home'),
     
     path('planillas', views.planillas, name='planilla'),
+    path('planillas/registro-titulos',views.registroTitulos, name='registro_titulos'),
+    path('planillas/materia-pendientes',views.materiaPendientes, name='materia_pendientes'),
+    path('planillas/finales',views.finales, name='finales'),
+    path('planillas/revision',views.revision, name='revision'),
 
+    path('profesores', views.profesores, name='profesores'),
+    
     path('materias', views.materias, name='materia'),
     path('materias/crear', views.materiaCrear, name='materia_crear'),
     path('materias/<str:pk>/editar', views.materiaEditar, name='materia_editar'),
