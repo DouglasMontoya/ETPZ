@@ -41,6 +41,7 @@ urlpatterns = [
     path('periodos/<str:pk>/eliminar', views.periodoEliminar, name='periodo_eliminar'),
     path('periodos/cambiar/<str:periodo_actual>', views.cambiar_periodo, name='cambiar_periodo'),
 
+    path('configuracion', views.configuracion, name='configuracion'),
 
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
