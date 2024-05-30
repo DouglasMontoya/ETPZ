@@ -43,6 +43,7 @@ urlpatterns = [
 
     path('configuracion', views.configuracion, name='configuracion'),
     path('configuracion/periodos-academicos', views.crearPeriodoAcademico, name='crear_periodo'),
+    path('configuracion/años', views.crearAño, name='crear_año'),
 
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
