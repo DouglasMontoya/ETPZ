@@ -947,3 +947,18 @@ def crearMenciones(request):
     }
 
     return render(request, 'home/table.html', context)
+
+@login_required(login_url="/login/")
+def Estudiante(request):
+    
+    form = EstudiantesForm()
+
+    content = 'home/estudiantes/estudiante_crear.html'
+    context = {
+        'form':form,
+        'segment':'Estudiantes',
+        'title':'Crear Estudiante',
+        'table':content,
+    }
+
+    return render(request, 'home/table.html', context)

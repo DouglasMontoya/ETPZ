@@ -42,6 +42,9 @@ urlpatterns = [
     path('periodos/cambiar/<str:periodo_actual>', views.cambiar_periodo, name='cambiar_periodo'),
 
     path('configuracion', views.configuracion, name='configuracion'),
+    
+    path('Estudiantes', views.Estudiante, name='Estudiantes'),
+
     path('configuracion/secciones', views.secciones, name='secciones'),
     path('configuracion/secciones/crear', views.crear_seccion, name='crear_seccion'),
     path('configuracion/secciones/editar', views.editar_seccion, name='editar_seccion'),
