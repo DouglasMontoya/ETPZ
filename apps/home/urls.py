@@ -42,6 +42,8 @@ urlpatterns = [
     path('periodos/cambiar/<str:periodo_actual>', views.cambiar_periodo, name='cambiar_periodo'),
 
     path('configuracion', views.configuracion, name='configuracion'),
+    
+    path('Estudiantes', views.Estudiante, name='Estudiantes'),
 
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),

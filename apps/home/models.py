@@ -32,6 +32,26 @@ class DatosPlantel(models.Model):
     class Meta:
         verbose_name_plural = "Datos Plantel"  # Nombre en plural para el panel de administración
 
+class Estudiantes(models.Model):
+    id = models.AutoField(primary_key=True)  # Llave primaria autoincremental
+    ci_tipo = models.CharField(max_length=1, null=False)  # String de un solo carácter no nulo
+    ci = models.PositiveIntegerField(null=False)  # Número no nulo
+    nombres = models.CharField(max_length=255)  # Cadena de texto no nula
+    apellidos = models.CharField(max_length=255)  # Cadena de texto no nula
+    sexo = models.CharField(max_length=255)
+    fecha_de_nacimiento = models.DateField(auto_now=True, auto_now_add=False)
+    anio = models.CharField(max_length=255)
+    mencion = models.CharField(max_length=5, null=False)  # String de cinco caracteres no nulo
+    seccion = models.CharField(max_length=1, null=False)  # String de un solo carácter no nulo
+    entidad_federal = models.CharField(max_length=255)  # Cadena de texto no nula
+    lugar_de_nacimiento = models.CharField(max_length=255)  # Cadena de texto no nula
+    
+    def __str__(self):
+        return self.nombre  # Representación en cadena del objeto
+    
+    class Meta:
+        verbose_name_plural = "Estudiantes"  # Nombre en plural para el panel de administración
+
 class Anios(models.Model):
     id = models.AutoField(primary_key=True)  # Llave primaria autoincremental
     nombre = models.CharField(max_length=255, null=False)  # Cadena de texto no nula
