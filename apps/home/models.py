@@ -64,8 +64,8 @@ class Anios(models.Model):
 
 class Menciones(models.Model):
     id = models.AutoField(primary_key=True)  # Llave primaria autoincremental
-    nombre = models.CharField(max_length=255, null=False)  # String de 255 de longitud
-    nombre_abrev = models.CharField(max_length=5, null=False)  # String de 255 de longitud
+    nombre = models.CharField(max_length=255, null=False, unique=True)  # String de 255 de longitud
+    nombre_abrev = models.CharField(max_length=5, null=False, unique=True)  # String de 255 de longitud
 
     def __str__(self):
         return self.nombre  # Representación en cadena del objeto
@@ -75,10 +75,24 @@ class Menciones(models.Model):
 
 class Secciones(models.Model):
     id = models.AutoField(primary_key=True)  # Llave primaria autoincremental
-    nombre = models.CharField(max_length=3, null=False)  # String de 255 de longitud
+    nombre = models.CharField(max_length=3, null=False, unique=True)  # String de 255 de longitud
 
     def __str__(self):
         return self.nombre  # Representación en cadena del objeto
 
     class Meta:
         verbose_name_plural = "Secciones"  # Nombre en plural para el panel de administración
+
+class AniosMencionSec(models.Model):
+    anio = models.ForeignKey(Anios, on_delete=models.CASCADE)
+    mencion = models.ForeignKey(Menciones, on_delete=models.CASCADE)
+    seccion= models.ForeignKey(Secciones, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{ self.anio.nombre } - { self.mencion.nombre } - { self.seccion.nombre }'  # Representación en cadena del objeto
+
+    class Meta:
+        verbose_name_plural = "Años Menciones Secciones"
+        constraints = [
+            models.UniqueConstraint(fields=['anio', 'mencion', 'seccion'], name='unique_anio_mencion_seccion')
+        ]

@@ -1,0 +1,56 @@
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<link id="custom_style" href="{{ ASSETS_ROOT }}/css/custom.css" rel="stylesheet" />
+{% endblock stylesheets %}
+
+<div class="container-fluid">
+
+    <form method="post">
+    {% csrf_token %}
+    <div class="container">
+        <div class="row">
+            <div class="col {% if form.nombre.errors %}form-error{% endif %}">
+                <label for="{{ form.nombre.id_for_label }}">Crear Año</label> <br>
+            <div class="col-3">
+                {{ form.nombre }}
+            </div>
+        </div>
+
+        <div class="w-100"></div>
+
+        <div class="col pt-3">
+            <button class="btn btn-primary" type="submit">Guardar Año</button>
+        </div>
+
+        
+        </div>
+    </div>
+    </form>
+
+
+    <div>
+        <table class="table table-striped mb-0 ">
+            <thead>
+                <tr>
+                    <th class="text-xs font-weight-bolder opacity-7">Años Registrados</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th class="font-weight-bold align-middle ps-4">Nombre del Año</th>
+                    <th class="font-weight-bold align-middle ps-4">Fecha de registro</th>
+                </tr>
+                <tr>
+                    <td class="font-weight align-middle ps-4">Primer Año</td>              
+                    <td class="font-weight align-middle ps-4">20-04-2020</td>
+                </tr>
+                <tr>
+                    <td class="font-weight align-middle ps-4">Segundo Año</td>              
+                    <td class="font-weight align-middle ps-4">05-06-2020</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="w-100"></div>
+</div>

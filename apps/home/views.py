@@ -1,7 +1,7 @@
 #import datetime, decimal
 from urllib import request
 from django import template
-from django.db import transaction 
+from django.db import IntegrityError, transaction 
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.forms import formset_factory
@@ -10,11 +10,13 @@ from django.db.models import Q, Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required, permission_required
-from .forms import PlantelForm
-from .models import DatosPlantel
+from .forms import PlantelForm, PeriodosForm, AniosForm, MencionesForm
+from .models import DatosPlantel, PeriodosAcademicos, Menciones, Secciones, AniosMencionSec
 
 from .models import *
 from .forms import *
+
+from .utils import getInputsMenciones
 
 @login_required(login_url="/login/")
 def index(request):
@@ -685,6 +687,7 @@ def configuracion(request):
                 DatosPlantel.objects.update(**form.cleaned_data)
             else:
                 DatosPlantel.objects.create(**form.cleaned_data)
+                datos_plantel = form.cleaned_data
     else:
 
         datos_plantel = DatosPlantel.objects.values().first()
@@ -704,15 +707,243 @@ def configuracion(request):
                 'ci': None
             }
 
-        form = PlantelForm(initial=datos_plantel)
+    form = PlantelForm(initial=datos_plantel)
 
     content = 'home/configuracion/index.html'
     context = {
         'form':form,
         'segment':'configuracion',
         'title':'Configuración',
-        'table':content,
-        'datos_plantel': datos_plantel
+        'table':content
+    }
+
+    return render(request, 'home/table.html', context)
+
+
+@login_required(login_url="/login/")
+def crearPeriodoAcademico(request):
+    
+    if request.method == 'POST':
+        form = PeriodosForm(request.POST)
+        if form.is_valid():
+
+            PeriodosAcademicos.objects.create(**form.cleaned_data)
+            
+            print("")
+            print(form.cleaned_data)
+            print("")
+
+    form = PeriodosForm()
+
+    content = 'home/configuracion/periodos-academicos.html'
+    context = {
+        'form':form,
+        'segment':'configuracion',
+        'title':'Periodos Academicos',
+        'table':content
+    }
+
+    return render(request, 'home/table.html', context)
+
+@login_required(login_url="/login/")
+def secciones(request):
+
+    content = 'home/configuracion/secciones.html'
+    context = {
+        'segment':'configuracion',
+        'title':'Secciones',
+        'table':content
+    }
+
+    return render(request, 'home/table.html', context)
+
+### Crear Secciones ###
+@login_required(login_url="/login/")
+def crear_seccion(request):
+
+    if request.method == 'POST':
+
+        seccion = request.POST.get('seccion')
+
+        inst_seccion = Secciones.objects.create(nombre=seccion)
+
+        datos = request.POST.copy()
+        datos.pop('seccion')
+        datos.pop('csrfmiddlewaretoken')
+
+        for id_anio in datos:
+
+            list_menciones = datos.getlist(str(id_anio))
+
+            inst_anio = Anios.objects.get(id=id_anio)
+
+            for id_mencion in list_menciones:
+
+                inst_mencion = Menciones.objects.get(id=id_mencion)
+
+                AniosMencionSec.objects.create(anio=inst_anio, mencion=inst_mencion, seccion=inst_seccion)
+
+    anios = list(Anios.objects.values('id', 'nombre'))
+    menciones = list(Menciones.objects.values('id', 'nombre', 'nombre_abrev'))
+
+    form = ''
+
+    form += f"""
+    <div class="col-1">
+        <div class="form-group">
+            <label for="seccion">Seccion</label>
+            <input type="text" name="seccion" class="form-control" id="seccion" required>
+        </div>
+    </div>
+    <div class="w-100"></div>
+    <p>Seleccione las menciones a las cuales pertenece la seccion a crear</p>
+    """
+
+    for index, anio in enumerate(anios):
+        form += f"""
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h6>{anio['nombre']}</h6>
+                    <div class="px-4">
+                        <p>Menciones</p>
+                        {getInputsMenciones(anio['id'], menciones)}
+                    </div>
+                </div>
+            </div>
+        </div>
+        """
+        if index == 2:
+            form += """
+            <div class="w-100 pb-4"></div>
+            """
+
+    content = 'home/configuracion/crear-seccion.html'
+    context = {
+        'form':form,
+        'segment':'configuracion',
+        'title':'Crear seccion',
+        'table':content
+    }
+
+    return render(request, 'home/table.html', context)
+
+### Editar Secciones ###
+@login_required(login_url="/login/")
+def editar_seccion(request):
+
+    if request.method == 'POST':
+
+        seccion = request.POST.get('seccion')
+
+        inst_seccion = Secciones.objects.create(nombre=seccion)
+
+        datos = request.POST.copy()
+        datos.pop('seccion')
+        datos.pop('csrfmiddlewaretoken')
+
+        for id_anio in datos:
+
+            list_menciones = datos.getlist(str(id_anio))
+
+            inst_anio = Anios.objects.get(id=id_anio)
+
+            for id_mencion in list_menciones:
+
+                inst_mencion = Menciones.objects.get(id=id_mencion)
+
+                AniosMencionSec.objects.create(anio=inst_anio, mencion=inst_mencion, seccion=inst_seccion)
+
+    anios = list(Anios.objects.values('id', 'nombre'))
+    menciones = list(Menciones.objects.values('id', 'nombre', 'nombre_abrev'))
+
+    form = ''
+
+    form += f"""
+    <div class="col-1">
+        <div class="form-group">
+            <label for="seccion">Seccion</label>
+            <input type="text" name="seccion" class="form-control" id="seccion" required>
+        </div>
+    </div>
+    <div class="w-100"></div>
+    <p>Seleccione las menciones a las cuales pertenece la seccion a crear</p>
+    """
+
+    for index, anio in enumerate(anios):
+        form += f"""
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h6>{anio['nombre']}</h6>
+                    <div class="px-4">
+                        <p>Menciones</p>
+                        {getInputsMenciones(anio['id'], menciones)}
+                    </div>
+                </div>
+            </div>
+        </div>
+        """
+        if index == 2:
+            form += """
+            <div class="w-100 pb-4"></div>
+            """
+
+    content = 'home/configuracion/editar-seccion.html'
+    context = {
+        'form':form,
+        'segment':'configuracion',
+        'title':'Editar seccion',
+        'table':content
+    }
+
+    return render(request, 'home/table.html', context)
+
+### Crear Años ###
+@login_required(login_url="/login/")
+def crearAnios(request):
+    
+    if request.method == 'POST':
+        form = AniosForm(request.POST)
+        if form.is_valid():
+            
+            Anios.objects.create(**form.cleaned_data)
+
+    form = AniosForm()
+
+    content = 'home/configuracion/anios.html'
+    context = {
+        'form':form,
+        'segment':'configuracion',
+        'title':'Años',
+        'table':content
+    }
+
+    return render(request, 'home/table.html', context)
+
+
+### Crear Menciones ###
+@login_required(login_url="/login/")
+def crearMenciones(request):
+    
+    if request.method == 'POST':
+        form = MencionesForm(request.POST)
+        if form.is_valid():
+            
+            try:
+                Menciones.objects.create(**form.cleaned_data)
+            except IntegrityError as e:
+                if 'unique constraint' in str(e.args):
+                    return HttpResponse("Esta mención ya existe. Inténtalo de nuevo.", status=400)
+
+    form = MencionesForm()
+
+    content = 'home/configuracion/menciones.html'
+    context = {
+        'form':form,
+        'segment':'configuracion',
+        'title':'Menciones',
+        'table':content
     }
 
     return render(request, 'home/table.html', context)

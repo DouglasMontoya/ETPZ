@@ -30,4 +30,16 @@ class EstudiantesForm(forms.Form):
     seccion = forms.ChoiceField(label="Sección", choices=[("A", "A"), ("B", "B"), ("C", "C")], required=True, widget=forms.Select(attrs={'class': 'form-control text-center p-2'}))
     entidad_federal = forms.CharField(label="Entidad federal", max_length=255, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     lugar_de_nacimiento =  forms.CharField(label="Lugar de nacimiento", max_length=255, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
-        
+
+class SeccionesForm(forms.Form):
+    nombre = forms.CharField(label="Sección", max_length=255, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+class PeriodosForm(forms.Form):
+    nombre = forms.CharField(label="Nombre", max_length=255, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+class AniosForm(forms.Form):
+    nombre = forms.CharField(label="Nombre", max_length=255, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+class MencionesForm(forms.Form):
+    nombre = forms.CharField(label="Nombre mención", max_length=255, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    nombre_abrev = forms.CharField(label="Nombre mención abreviado", max_length=5, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))

@@ -1,0 +1,58 @@
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<link id="custom_style" href="{{ ASSETS_ROOT }}/css/custom.css" rel="stylesheet" />
+{% endblock stylesheets %}
+
+<div class="container-fluid">
+
+    <form method="post">
+    {% csrf_token %}
+    <div class="container">
+        <div class="row">
+            <div class="col-6 {% if form.nombre.errors %}form-error{% endif %} mb-3">
+                <label for="{{ form.nombre.id_for_label }}">{{ form.nombre.label }}</label> <br>
+                {{ form.nombre }}
+            </div>
+            <label for="{{ form.nombre_abrev.id_for_label }}">{{ form.nombre_abrev.label }}</label> <br>
+            <div class="col-1 {% if form.nombre_abrev.errors %}form-error{% endif %}">
+                {{ form.nombre_abrev }}
+            </div>
+        </div>
+
+        <div class="w-100"></div>
+
+        <div class="col pt-3">
+            <button class="btn btn-primary" type="submit">Guardar Mención</button>
+        </div>
+
+        
+        </div>
+    </div>
+    </form>
+
+    <div>
+        <table class="table table-striped mb-0 ">
+            <thead>
+                <tr>
+                    <th class="text-xs font-weight-bolder opacity-7">Menciones Registrados</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th class="font-weight-bold align-middle ps-4">Nombre de mencion</th>
+                    <th class="font-weight-bold align-middle ps-4">Abreviacion del nombre de mencion</th>
+                </tr>
+                <tr>
+                    <td class="font-weight align-middle ps-4">Quimica</td>              
+                    <td class="font-weight align-middle ps-4">QI</td>
+                </tr>
+                <tr>
+                    <td class="font-weight align-middle ps-4">Mantenimiento</td>              
+                    <td class="font-weight align-middle ps-4">MM</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="w-100"></div>
+</div>
