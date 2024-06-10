@@ -32,6 +32,15 @@ class DatosPlantel(models.Model):
     class Meta:
         verbose_name_plural = "Datos Plantel"  # Nombre en plural para el panel de administración
 
+class Profesor(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=255)
+    apellido = models.CharField(max_length=255)
+    ci_tipo = models.CharField(max_length=1, null=False)
+    ci = models.PositiveIntegerField(null=False)
+
+    def __str__(self):
+        return self.nombre 
 class Anios(models.Model):
     id = models.AutoField(primary_key=True)  # Llave primaria autoincremental
     nombre = models.CharField(max_length=255, null=False)  # Cadena de texto no nula

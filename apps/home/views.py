@@ -313,7 +313,7 @@ def crearProfesores(request):
         form = ProfesorForm(request.POST)
         if form.is_valid():
 
-            Profesores.objects.create(**form.cleaned_data)
+            Profesor.objects.create(**form.cleaned_data)
             
             print("")
             print(form.cleaned_data)
