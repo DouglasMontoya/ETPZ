@@ -4,7 +4,7 @@ from apps.home import views
 urlpatterns = [
 
     # The home page
-    path('', views.index, name='home'),
+    path('', views.profesores, name='home'),
     
     path('planillas', views.planillas, name='planilla'),
     path('planillas/registro-titulos',views.registroTitulos, name='registro_titulos'),

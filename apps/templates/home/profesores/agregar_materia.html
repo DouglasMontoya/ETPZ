@@ -51,7 +51,7 @@
             <td class="text-left p-2">{{ materia.materia__mencion__nombre }}</td>
             <td class="text-left p-2">{{ materia.seccion__nombre }}</td>
             <td class="text-center p-2">
-              <a class="btn-eliminar" href="#" data-id="{{ materia.id }}">
+              <a class="btn-eliminar" data-id="{{ materia.id }}">
                 <i class="fa fa-trash" aria-hidden="true" title="Eliminar"></i>
               </a>
             </td>
@@ -118,10 +118,12 @@
   document.querySelectorAll(".btn-eliminar").forEach((btn) => {
     btn.addEventListener("click", () => {
       const id = btn.getAttribute("data-id")
-      const message = "Seguro que desea eliminar esta materia pendiente del estudiante?"
+      const message = "Seguro que desea quitar esta materia impartida por este profesor?"
       if (confirm(message) === true) {
         eliminarMateriaProfesor(id)
-        location.reload()
+        setTimeout(() => {
+          location.reload()
+        }, 1000)
       }
     })
   })
