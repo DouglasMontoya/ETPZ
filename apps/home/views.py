@@ -1791,6 +1791,8 @@ def generar_boleta(request, pk):
 
     notas, promedios, inasistencias, estudiante = obtener_datos_boleta(pk, periodo)
 
+    director = DatosPlantel.objects.all().first().director
+
     table = 'home/form-content/planillas_form.html'
     context={
         'segment':'boleta',
@@ -1801,7 +1803,8 @@ def generar_boleta(request, pk):
         'periodo': periodo_nombre['nombre'],
         'promedios': promedios,
         'inasistencias': inasistencias,
-        'notas': notas
+        'notas': notas,
+        'director': director
     }
 
     return render(request, 'home/boletas/boleta.html', context)
