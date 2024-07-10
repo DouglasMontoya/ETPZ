@@ -89,6 +89,7 @@ Para realizar migraciones o actualizar el repositorio en GitHub, usa los siguien
 
 
 ## Estructura del Proyecto 📂
+```python
 ETPZ
 │
 ├── apps
@@ -171,7 +172,7 @@ manage.py: Herramienta de línea de comandos de Django.
 readme.txt: Archivo README del proyecto.
 requirements.txt: Lista de dependencias del proyecto.
 server.py: Configuración del servidor de desarrollo.
-
+```
 
 
 ## Contribución 🤝
