@@ -16,6 +16,10 @@
           <div class="d-flex justify-content-between"> 
             <h6>{{ title }}</h6>
             <div>
+              <button class="btn btn-icon btn-3 btn-primary btn-sm" type="button" title="Pasar al siguiente año escolar" id="btn-siguiente-anio">
+                <span class="btn-inner--icon"><i class="fas fa-forward"></i></span>
+                <span class="btn-inner--text">Procesar</span>
+              </button>
               <button class="btn btn-icon btn-3 btn-primary btn-sm" type="button" onclick="imprimirTabla()">
                 <span class="btn-inner--icon"><i class="fas fa-print"></i></span>
                 <span class="btn-inner--text">Imprimir</span>
@@ -26,6 +30,10 @@
               <i class="fa fa-plus-circle" aria-hidden="true"></i>
             </a>
             {% endif %}
+          </div>
+          <div class="bg-danger text-white p-3 d-none rounded my-2" id="toast-error">
+            <p class="mb-0" id="mensaje-error"></p>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" id="quit-toast"></button>
           </div>
         </div>
         <div class="card-body p-0 d-flex align-items-center pb-5 flex-column position-relative" id="tabla-notas" width="900">
@@ -370,6 +378,41 @@
         }
     });
   })
+
+  const btnSiguienteAnio = document.getElementById("btn-siguiente-anio")
+  btnSiguienteAnio.addEventListener("click", () => {
+    fetch(`/notas/procesar?anio=${q_anio}&mencion=${q_mencion}&seccion=${q_seccion}&periodo=${q_periodo}`, {
+      method: 'POST',
+      headers: {
+          'X-CSRFToken': getCookie('csrftoken'),
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ hola: 'hola'}),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Respuesta del servidor:', data);
+        if (data.error) {
+          const error = document.getElementById("mensaje-error")
+          $('#toast-error').removeClass("d-none").addClass("d-flex");
+          error.innerHTML = data.error
+        }
+        else if (data.message) {
+          const message = document.getElementById("mensaje-error")
+          $('#toast-error').removeClass("d-none").addClass("d-flex");
+          $('#toast-error').removeClass("bg-danger").addClass("bg-success");
+          message.innerHTML = data.message
+        }
+    })
+    .catch(error => {
+        console.error('Error al enviar la solicitud:', error);
+    }); 
+  })
+
+  const toastErrorQuitButton = document.getElementById("quit-toast");
+    toastErrorQuitButton.addEventListener("click", () => {
+      $('#toast-error').removeClass("d-flex").addClass("d-none");
+    })
   
 </script>
 {% endblock javascripts %}

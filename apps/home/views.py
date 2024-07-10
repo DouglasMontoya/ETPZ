@@ -1378,7 +1378,7 @@ def obtener_estudiantes_notas(anio, mencion, seccion, periodo):
     resultado = []
 
     for estudiante in estudiantes:
-        notas = list(Notas.objects.filter(estudiante_id=estudiante['estudiante__id'], tipo='n').values(
+        notas = list(Notas.objects.filter(estudiante_id=estudiante['estudiante__id'], tipo='n', periodo=periodo).values(
             'lapso1', 'lapso2', 'lapso3', 'definitiva', 'revision', 'materia', 'materia__materia__literal'
         ))
 
@@ -1456,7 +1456,7 @@ def notas(request):
 def estudiantes(request):
     busqueda = request.POST.get('buscar')
     data_table = Estudiantes.objects.values('id', 'ci_tipo', 'ci', 'nombres', 'apellidos', 'sexo', 'anio', 'mencion', 'seccion',  'lugar_de_nacimiento', 'estado')
-    data_table = Estudiantes.objects.all().order_by('-ci')
+    data_table = Estudiantes.objects.all().order_by('-id')
     if busqueda:
         data_table = Estudiantes.objects.filter(
             Q(ci_tipo__icontains = busqueda) |
@@ -1880,3 +1880,57 @@ def eliminar_materia_pendiente(request, pk):
     materia.delete()
 
     return JsonResponse({"message": "Los datos se actualizaron correctamente."}, status=200)
+
+@login_required(login_url="/login/")
+def procesar(request):
+
+    anio = request.GET.get('anio')
+    mencion = request.GET.get('mencion')
+    seccion = request.GET.get('seccion')
+    periodo = request.GET.get('periodo')
+
+    siguiente_periodo = PeriodosAcademicos.objects.filter(id__gt=periodo).all().first()
+    siguiente_anio = Anios.objects.filter(id__gt=anio).all().first()
+
+    if not siguiente_periodo:
+        return JsonResponse({"error": "Para pasar los estudiantes al siguiente periodo escolar debe primero crearlo.", "message": None}, status=200)                
+
+    estudiantes = obtener_estudiantes_notas(anio=anio, mencion=mencion, seccion=seccion, periodo=periodo)
+
+    for estudiante in estudiantes:
+
+        estudiante_object = Estudiantes.objects.get(id=estudiante['estudiante__id'])
+
+        materias_pendientes = 0
+        for nota in estudiante['notas']:
+            if nota['revision'] > 0 and nota['revision'] < 10:
+                materias_pendientes += 1
+
+        if materias_pendientes > 2:
+
+            setattr(estudiante_object, 'estado', 3)
+            
+        elif materias_pendientes > 0 and materias_pendientes < 3:
+
+            setattr(estudiante_object, 'estado', 2)
+            setattr(estudiante_object, 'anio', siguiente_anio)
+
+            materias = MateriasAniosMenciones.objects.filter(anio=siguiente_anio.id, mencion=mencion).all()
+
+            for materia in materias:
+                Notas.objects.create(materia=materia, estudiante=estudiante_object, periodo=siguiente_periodo, anio=siguiente_anio, mencion=estudiante_object.mencion, seccion=estudiante_object.seccion, ci_tipo=estudiante_object.ci_tipo, ci=estudiante_object.ci, tipo='n')
+        
+        else:
+
+            setattr(estudiante_object, 'estado', 1)
+            setattr(estudiante_object, 'anio', siguiente_anio)
+
+            materias = MateriasAniosMenciones.objects.filter(anio=siguiente_anio.id, mencion=mencion).all()
+
+            for materia in materias:
+                Notas.objects.create(materia=materia, estudiante=estudiante_object, periodo=siguiente_periodo, anio=siguiente_anio, mencion=estudiante_object.mencion, seccion=estudiante_object.seccion, ci_tipo=estudiante_object.ci_tipo, ci=estudiante_object.ci, tipo='n')
+
+        estudiante_object.save()
+
+    return JsonResponse({"message": "Los alumnos fueron procesador correctamente al siguiente año escolar", "error": None}, status=200)
+

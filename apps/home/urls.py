@@ -63,6 +63,7 @@ urlpatterns = [
     path('notas', views.notas, name='notas'),
     path('notas/cargar', views.Cargar_Notas, name='Cargar_Notas'),
     path('notas/actualizar/<str:pk>', views.actualizar_notas, name='actualizar_notas'),
+    path('notas/procesar', views.procesar, name='procesar'),
 
     path('boletas', views.boletas, name='boletas'),
     path('boletas/lista', views.boletas_lista_estudiantes, name='lista_boletas'),
