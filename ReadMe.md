@@ -195,7 +195,7 @@ Daniel Escalona -[GitHub] (https://github.com/DanielEsc0911)
 
 ## Colaboradores 🖥️👾
 - Sergio Hurtado - [GitHub] (https://github.com/HSerch19)
-- Daniel De Freitas - [GitHub] (https://github.com/)
+- Daniel De Freitas - [GitHub] (https://github.com/DADV20)
 - Georgelys Herrera - [GitHub] (https://github.com/georgbztt)
 - Douglas Montoya - [GitHub] (https://github.com/DouglasMontoya)
 
